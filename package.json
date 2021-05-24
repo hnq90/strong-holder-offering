@@ -1,0 +1,16 @@
+{
+  "name": "strong-holder-offering",
+  "version": "1.0.0",
+  "description": "reward for MOMA strong holder",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "conglt",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "dotenv": "^9.0.2",
+    "mongoose": "^5.12.10",
+    "web3": "^1.3.6"
+  }
+}
