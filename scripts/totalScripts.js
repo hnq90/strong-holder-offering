@@ -55,7 +55,11 @@ async function main() {
         lpFarmAddresses.includes(receiver) ||
         momaFarmAddresses.includes(receiver) ||
         vaultAddresses.includes(receiver) ||
+<<<<<<< b60ea28ee7157acc77174eacff1cc21e7825960a
         receiver === LP_ADDRESS.toLowerCase()
+=======
+        receiver == LP_ADDRESS.toLowerCase()
+>>>>>>> Get LP Holder and Farmer
       )
         continue;
 
