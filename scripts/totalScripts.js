@@ -15,16 +15,16 @@ const {
   LP_ADDRESS,
   VAULT_ADDRESSES,
   MOMA_TOTAL_VALID,
-  LP_MOMA_RATE
+  LP_MOMA_RATE,
 } = require('./constant');
 
 const web3 = new Web3(process.env.RPC);
 const addressZero = '0x0000000000000000000000000000000000000000';
 const moma = new web3.eth.Contract(erc20Abi, MOMA_ADDRESS);
 const lp = new web3.eth.Contract(erc20Abi, LP_ADDRESS);
-const lpFarmAddresses = LP_FARM_ADDRESS.map(address => address.toLowerCase());
-const momaFarmAddresses = MOMA_FARM_ADDRRESS.map(address => address.toLowerCase());
-const vaultAddresses = VAULT_ADDRESSES.map(address => address.toLowerCase());
+const lpFarmAddresses = LP_FARM_ADDRESS.map((address) => address.toLowerCase());
+const momaFarmAddresses = MOMA_FARM_ADDRRESS.map((address) => address.toLowerCase());
+const vaultAddresses = VAULT_ADDRESSES.map((address) => address.toLowerCase());
 
 mongoose.connect(
   process.env.MONGODB_URI,
@@ -32,9 +32,9 @@ mongoose.connect(
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useFindAndModify: false,
-    useCreateIndex: true
+    useCreateIndex: true,
   },
-  error => {
+  (error) => {
     if (error) console.log(error);
   }
 );
@@ -43,7 +43,7 @@ async function main() {
   try {
     let momaEvents = await moma.getPastEvents('Transfer', {
       filter: {},
-      fromBlock: MOMA_DEPLOY_BLOCK
+      fromBlock: MOMA_DEPLOY_BLOCK,
     });
 
     for (let i = 0; i < momaEvents.length; i++) {
@@ -55,11 +55,7 @@ async function main() {
         lpFarmAddresses.includes(receiver) ||
         momaFarmAddresses.includes(receiver) ||
         vaultAddresses.includes(receiver) ||
-<<<<<<< b60ea28ee7157acc77174eacff1cc21e7825960a
         receiver === LP_ADDRESS.toLowerCase()
-=======
-        receiver == LP_ADDRESS.toLowerCase()
->>>>>>> Get LP Holder and Farmer
       )
         continue;
 
@@ -96,7 +92,7 @@ async function main() {
           momaBalance: momaBalance,
           lpBalance: lpBalance,
           amountLPInFarm: amountLPInFarm,
-          amountMomaInFarm: amountMomaInFarm
+          amountMomaInFarm: amountMomaInFarm,
         });
 
         await newHolders.save();
@@ -105,7 +101,7 @@ async function main() {
 
     let lpEvents = await lp.getPastEvents('Transfer', {
       filter: {},
-      fromBlock: MOMA_DEPLOY_BLOCK
+      fromBlock: MOMA_DEPLOY_BLOCK,
     });
 
     for (let i = 0; i < lpEvents.length; i++) {
@@ -134,7 +130,7 @@ async function main() {
           momaBalance: 0,
           lpBalance: lpBalance,
           amountLPInFarm: amountLPInFarm,
-          amountMomaInFarm: amountMomaInFarm
+          amountMomaInFarm: amountMomaInFarm,
         });
 
         await newHolders.save();
@@ -154,7 +150,7 @@ async function main() {
         results.push({
           address: data[i].address,
           momaAmount: data[i].momaBalance + data[i].amountMomaInFarm,
-          lpAmount: data[i].lpBalance + data[i].amountLPInFarm
+          lpAmount: data[i].lpBalance + data[i].amountLPInFarm,
         });
     }
 
