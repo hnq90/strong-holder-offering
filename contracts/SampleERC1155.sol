@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-// ERC1155
-contract SampleERC1155 is ERC1155, Ownable {
+// SampleERC1155
+contract SampleERC1155 is ERC1155Pausable, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter internal _tokenIdCounter;
