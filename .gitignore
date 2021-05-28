@@ -4,3 +4,5 @@ results
 .env
 yarn.lock
 package-lock.json
+artifacts
+cache
