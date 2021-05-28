@@ -13,10 +13,12 @@ contract Airdrop is Ownable {
     address public erc1155;
     address public moma;
     uint256 public endBlock;
+    uint256 public amountMomaPerNFT;
 
-    // tokenId => amount MOMA
-    mapping(uint256 => uint256) public tokenIdToAmount;
-    mapping(address => mapping(uint256 => bool)) internal _claimed;
+    // tokenId => bool
+    mapping(uint256 => bool) public _tokenIdCanClaim;
+
+    mapping(address => mapping(uint256 => bool)) public claimed;
 
     modifier whenNFTPaused() {
         require(Pausable(erc1155).paused() == true, "NFT not paused");
@@ -27,16 +29,15 @@ contract Airdrop is Ownable {
         address _erc1155,
         address _moma,
         uint256[] memory _tokenId,
-        uint256[] memory _amountMoma,
+        uint256 _amountMomaPerNFT,
         uint256 _endBlock
     ) {
-        require(_tokenId.length == _amountMoma.length, "Parameter not match");
         require(_endBlock > block.number, "Invalid endBlock");
-
         for (uint256 i = 0; i < _tokenId.length; i++) {
-            tokenIdToAmount[_tokenId[i]] = _amountMoma[i];
+            _tokenIdCanClaim[_tokenId[i]] = true;
         }
 
+        amountMomaPerNFT = _amountMomaPerNFT;
         erc1155 = _erc1155;
         moma = _moma;
         endBlock = _endBlock;
@@ -44,18 +45,21 @@ contract Airdrop is Ownable {
 
     function claim(uint256 _tokenId) external whenNFTPaused {
         require(block.number < endBlock, "Claim was ended");
-        require(tokenIdToAmount[_tokenId] > 0, "Invald tokenId");
+        require(_tokenIdCanClaim[_tokenId] == true, "Invalid tokenId");
         require(IERC1155(erc1155).balanceOf(_msgSender(), _tokenId) > 0, "You do not own NFT");
-        require(_claimed[_msgSender()][_tokenId] == false, "You claimed this tokenId");
-        require(IERC20(moma).balanceOf(address(this)) >= tokenIdToAmount[_tokenId], "Not enough balance to claim" );
+        require(claimed[_msgSender()][_tokenId] == false, "You claimed this tokenId");
+        require(
+            IERC20(moma).balanceOf(address(this)) >= amountMomaPerNFT,
+            "Not enough balance to claim"
+        );
 
-        _claimed[_msgSender()][_tokenId] = true;
-        IERC20(moma).safeTransfer(_msgSender(), tokenIdToAmount[_tokenId]);
+        claimed[_msgSender()][_tokenId] = true;
+        IERC20(moma).safeTransfer(_msgSender(), amountMomaPerNFT);
     }
 
-    function withdrawFunds() external onlyOwner {
-        uint256 balance = IERC20(moma).balanceOf(address(this));
-        IERC20(moma).safeTransfer(_msgSender(), balance);
+    function withdrawFunds(address _token) external onlyOwner {
+        uint256 balance = IERC20(_token).balanceOf(address(this));
+        IERC20(_token).safeTransfer(_msgSender(), balance);
     }
 
     function forceEnd() external onlyOwner {
