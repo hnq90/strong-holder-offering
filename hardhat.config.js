@@ -21,40 +21,19 @@ module.exports = {
   },
   defaultNetwork: 'localhost',
   networks: {
-    localhost: {
-      url: 'http://127.0.0.1:8545',
-      gasLimit: 6000000000,
-      defaultBalanceEther: '1000',
-    },
-    bsctestnet: {
-      url: `https://data-seed-prebsc-1-s1.binance.org:8545/`,
-      accounts: [
-        process.env.BSC_TESTNET_DEPLOYER_PRIVATE_KEY,
-        process.env.BSC_TESTNET_MARKET_ADMIN_PRIVATE_KEY,
-      ],
+    bscmainnet: {
+      url: `https://bsc-dataseed.binance.org/`,
+      accounts: [process.env.BSC_MAINNET_PRIVATE_KEY],
       gasLimit: 30000000,
-    },
-    onetestnet: {
-      url: `https://api.s0.b.hmny.io`,
-      accounts: [
-        process.env.ONE_TESTNET_DEPLOYER_PRIVATE_KEY,
-        process.env.ONE_TESTNET_MARKET_ADMIN_PRIVATE_KEY,
-      ],
-    },
-    ropsten: {
-      url: `https://ropsten.infura.io/v3/${process.env.INFURA_KEY}`,
-      accounts: [
-        process.env.ROPSTEN_DEPLOYER_PRIVATE_KEY,
-        process.env.ROPSTEN_MARKET_ADMIN_PRIVATE_KEY,
-      ],
-      gasLimit: '6721975',
     },
     rinkeby: {
       url: `https://rinkeby.infura.io/v3/${process.env.INFURA_KEY}`,
-      accounts: [
-        process.env.ROPSTEN_DEPLOYER_PRIVATE_KEY,
-        process.env.ROPSTEN_MARKET_ADMIN_PRIVATE_KEY,
-      ],
+      accounts: [process.env.RINKEBY_PRIVATE_KEY],
+      gasLimit: '6721975',
+    },
+    ethmainnet: {
+      url: `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`,
+      accounts: [process.env.ETH_MAINNET_PRIVATE_KEY],
       gasLimit: '6721975',
     },
   },

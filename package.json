@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "npx hardhat test",
-    "compile": "npx hardhat compile"
+    "compile": "npx hardhat compile",
+    "deploy": "npx hardhat run scripts/deploy.js --network bscmainnet",
+    "getList-bsc-mainnet": "npx hardhat run scripts/getListBSC.js --network bscmainnet",
+    "getList-eth-mainnet": "npx hardhat run scripts/getListETH.js --network ethmainnet"
   },
   "author": "conglt",
   "license": "GPL-3.0",

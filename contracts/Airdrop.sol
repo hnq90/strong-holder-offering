@@ -28,13 +28,13 @@ contract Airdrop is Ownable {
     constructor(
         address _erc1155,
         address _moma,
-        uint256[] memory _tokenId,
+        uint256[] memory _tokenIds,
         uint256 _amountMomaPerNFT,
         uint256 _endBlock
     ) {
         require(_endBlock > block.number, "Invalid endBlock");
-        for (uint256 i = 0; i < _tokenId.length; i++) {
-            _tokenIdCanClaim[_tokenId[i]] = true;
+        for (uint256 i = 0; i < _tokenIds.length; i++) {
+            _tokenIdCanClaim[_tokenIds[i]] = true;
         }
 
         amountMomaPerNFT = _amountMomaPerNFT;
