@@ -18,6 +18,9 @@ const ETHWhiteListSchema = new Schema({
   amountMomaInFarm: {
     type: Number,
   },
+  amountMomaVesting: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model('ETHWhiteList', ETHWhiteListSchema);

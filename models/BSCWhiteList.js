@@ -18,6 +18,9 @@ const BSCWhiteListSchema = new Schema({
   amountMomaInFarm: {
     type: Number,
   },
+  amountMomaVesting: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model('BSCWhiteList', BSCWhiteListSchema);

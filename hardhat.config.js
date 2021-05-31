@@ -26,6 +26,11 @@ module.exports = {
       accounts: [process.env.BSC_MAINNET_PRIVATE_KEY],
       gasLimit: 30000000,
     },
+    bsctestnet: {
+      url: `https://data-seed-prebsc-1-s1.binance.org:8545/`,
+      accounts: [process.env.BSC_TESTNET_PRIVATE_KEY],
+      gasLimit: 30000000,
+    },
     rinkeby: {
       url: `https://rinkeby.infura.io/v3/${process.env.INFURA_KEY}`,
       accounts: [process.env.RINKEBY_PRIVATE_KEY],
