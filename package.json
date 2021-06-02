@@ -6,9 +6,11 @@
   "scripts": {
     "test": "npx hardhat test",
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run scripts/deploy.js --network bscmainnet",
+    "deploy-bsc-mainnet": "npx hardhat run scripts/deploy.js --network bscmainnet",
+    "deploy-bsc-testnet": "npx hardhat run scripts/deploy.js --network bsctestnet",
     "getList-bsc-mainnet": "npx hardhat run scripts/getListBSC.js --network bscmainnet",
-    "getList-eth-mainnet": "npx hardhat run scripts/getListETH.js --network ethmainnet"
+    "getList-eth-mainnet": "npx hardhat run scripts/getListETH.js --network ethmainnet",
+    "random": "node scripts/random.js"
   },
   "author": "conglt",
   "license": "GPL-3.0",
