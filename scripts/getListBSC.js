@@ -60,64 +60,64 @@ async function main() {
       momaFarms.push(farm);
     }
 
-    // for (let i = 0; i < momaTransfer.length - 1; i++) {
-    //   let transfer = momaTransfer[i];
-    //   let receiver = transfer['"To"'].toLowerCase().replace('"', '');
-    //   receiver = receiver.replace('"', '');
-    //   let receiverCode = await web3.eth.getCode(receiver);
+    for (let i = 0; i < momaTransfer.length - 1; i++) {
+      let transfer = momaTransfer[i];
+      let receiver = transfer['"To"'].toLowerCase().replace('"', '');
+      receiver = receiver.replace('"', '');
+      let receiverCode = await web3.eth.getCode(receiver);
 
-    //   if (receiverCode !== '0x' || receiver === addressZero) continue;
+      if (receiverCode !== '0x' || receiver === addressZero) continue;
 
-    //   let receiverData = await BSCWhiteList.findOne({ address: receiver });
-    //   if (!receiverData) {
-    //     let momaBalance = parseFloat(
-    //       web3.utils.fromWei(await moma.methods.balanceOf(receiver).call())
-    //     );
-    //     let lpBalance = parseFloat(web3.utils.fromWei(await lp.methods.balanceOf(receiver).call()));
-    //     let amountLPInFarm = 0;
-    //     let amountMomaInFarm = 0;
-    //     let amountMomaVesting = 0;
+      let receiverData = await BSCWhiteList.findOne({ address: receiver });
+      if (!receiverData) {
+        let momaBalance = parseFloat(
+          web3.utils.fromWei(await moma.methods.balanceOf(receiver).call())
+        );
+        let lpBalance = parseFloat(web3.utils.fromWei(await lp.methods.balanceOf(receiver).call()));
+        let amountLPInFarm = 0;
+        let amountMomaInFarm = 0;
+        let amountMomaVesting = 0;
 
-    //     for (let j = 0; j < lpFarmAddresses.length; j++) {
-    //       let userInfo = await lpFarms[j].farm.methods.userInfo(receiver).call();
-    //       amountLPInFarm = amountLPInFarm + parseFloat(web3.utils.fromWei(userInfo.amount));
-    //       amountMomaInFarm =
-    //         amountMomaInFarm +
-    //         parseFloat(
-    //           web3.utils.fromWei(await lpFarms[j].farm.methods.pendingReward(receiver).call())
-    //         );
+        for (let j = 0; j < lpFarmAddresses.length; j++) {
+          let userInfo = await lpFarms[j].farm.methods.userInfo(receiver).call();
+          amountLPInFarm = amountLPInFarm + parseFloat(web3.utils.fromWei(userInfo.amount));
+          amountMomaInFarm =
+            amountMomaInFarm +
+            parseFloat(
+              web3.utils.fromWei(await lpFarms[j].farm.methods.pendingReward(receiver).call())
+            );
 
-    //       if (lpFarms[j].vesting !== null) {
-    //         amountMomaVesting =
-    //           amountMomaVesting +
-    //           parseFloat(
-    //             web3.utils.fromWei(
-    //               await lpFarms[j].vesting.methods.getVestingTotalClaimableAmount(receiver).call()
-    //             )
-    //           );
-    //       }
-    //     }
+          if (lpFarms[j].vesting !== null) {
+            amountMomaVesting =
+              amountMomaVesting +
+              parseFloat(
+                web3.utils.fromWei(
+                  await lpFarms[j].vesting.methods.getTotalAmountLockedByUser(receiver).call()
+                )
+              );
+          }
+        }
 
-    //     for (let j = 0; j < momaFarmAddresses.length; j++) {
-    //       let userInfo = await momaFarms[j].methods.userInfo(receiver).call();
-    //       amountMomaInFarm = amountMomaInFarm + parseFloat(web3.utils.fromWei(userInfo.amount));
-    //       amountMomaInFarm =
-    //         amountMomaInFarm +
-    //         parseFloat(web3.utils.fromWei(await momaFarms[j].methods.pendingMoma(receiver).call()));
-    //     }
+        for (let j = 0; j < momaFarmAddresses.length; j++) {
+          let userInfo = await momaFarms[j].methods.userInfo(receiver).call();
+          amountMomaInFarm = amountMomaInFarm + parseFloat(web3.utils.fromWei(userInfo.amount));
+          amountMomaInFarm =
+            amountMomaInFarm +
+            parseFloat(web3.utils.fromWei(await momaFarms[j].methods.pendingMoma(receiver).call()));
+        }
 
-    //     let newRecord = new BSCWhiteList({
-    //       address: receiver,
-    //       momaBalance: momaBalance,
-    //       lpBalance: lpBalance,
-    //       amountLPInFarm: amountLPInFarm,
-    //       amountMomaInFarm: amountMomaInFarm,
-    //       amountMomaVesting: amountMomaVesting,
-    //     });
+        let newRecord = new BSCWhiteList({
+          address: receiver,
+          momaBalance: momaBalance,
+          lpBalance: lpBalance,
+          amountLPInFarm: amountLPInFarm,
+          amountMomaInFarm: amountMomaInFarm,
+          amountMomaVesting: amountMomaVesting,
+        });
 
-    //     await newRecord.save();
-    //   }
-    // }
+        await newRecord.save();
+      }
+    }
 
     let lpTransfer = await BSCLpTransfer.find({});
 
@@ -144,7 +144,7 @@ async function main() {
               amountMomaVesting +
               parseFloat(
                 web3.utils.fromWei(
-                  await lpFarms[j].vesting.methods.getVestingTotalClaimableAmount(receiver).call()
+                  await lpFarms[j].vesting.methods.getTotalAmountLockedByUser(receiver).call()
                 )
               );
           }

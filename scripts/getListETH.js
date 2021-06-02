@@ -83,7 +83,7 @@ async function main() {
             amountMomaVesting +
             parseFloat(
               web3.utils.fromWei(
-                await lpFarms[j].vesting.methods.getVestingTotalClaimableAmount(receiver).call()
+                await lpFarms[j].vesting.methods.getTotalAmountLockedByUser(receiver).call()
               )
             );
         }
@@ -123,13 +123,15 @@ async function main() {
           amountLPInFarm = amountLPInFarm + parseFloat(web3.utils.fromWei(userInfo.amount));
           amountMomaInFarm =
             amountMomaInFarm +
-            parseFloat(web3.utils.fromWei(await farm[j].methods.pendingReward(receiver).call()));
+            parseFloat(
+              web3.utils.fromWei(await lpFarms[j].farm.methods.pendingReward(receiver).call())
+            );
           if (lpFarms[j].vesting !== null) {
             amountMomaVesting =
               amountMomaVesting +
               parseFloat(
                 web3.utils.fromWei(
-                  await lpFarms[j].vesting.methods.getVestingTotalClaimableAmount(receiver).call()
+                  await lpFarms[j].vesting.methods.getTotalAmountLockedByUser(receiver).call()
                 )
               );
           }

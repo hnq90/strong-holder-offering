@@ -10,7 +10,8 @@
     "deploy-bsc-testnet": "npx hardhat run scripts/deploy.js --network bsctestnet",
     "getList-bsc-mainnet": "npx hardhat run scripts/getListBSC.js --network bscmainnet",
     "getList-eth-mainnet": "npx hardhat run scripts/getListETH.js --network ethmainnet",
-    "random": "node scripts/random.js"
+    "random": "node scripts/random.js",
+    "accMoma": "node scripts/accMoma.js"
   },
   "author": "conglt",
   "license": "GPL-3.0",
