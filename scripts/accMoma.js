@@ -26,6 +26,7 @@ async function main() {
   try {
     let data = await ETHWhiteList.find();
     let result = [];
+    let accMoma = [];
 
     for (let i = 0; i < data.length; i++) {
       let ethTotalMoma =
@@ -34,21 +35,19 @@ async function main() {
         data[i].amountMomaVesting +
         ETH_MAINNET.LP_MOMA_RATE * (data[i].lpBalance + data[i].amountLPInFarm);
 
-      if (ethTotalMoma >= MOMA_TOTAL_VALID) {
-        result.push(data[i].address);
-        continue;
-      }
-
+      let bscTotalMoma = 0;
       let bscData = await BSCWhiteList.findOne({ address: data[i].address });
       if (bscData) {
-        let bscTotalMoma =
+        bscTotalMoma =
           bscData.momaBalance +
           bscData.amountMomaInFarm +
           bscData.amountMomaVesting +
           BSC_MAINNET.LP_MOMA_RATE * (bscData.lpBalance + bscData.amountLPInFarm);
-        if (bscTotalMoma + ethTotalMoma >= MOMA_TOTAL_VALID) {
-          result.push(data[i].address);
-        }
+      }
+
+      if (bscTotalMoma + ethTotalMoma >= MOMA_TOTAL_VALID) {
+        result.push(data[i].address);
+        accMoma.push({ address: data[i].address, accMoma: bscTotalMoma + ethTotalMoma });
       }
     }
 
@@ -65,23 +64,13 @@ async function main() {
 
       if (bscTotalMoma >= MOMA_TOTAL_VALID) {
         result.push(data[i].address);
-        continue;
+        accMoma.push({ address: data[i].address, accMoma: bscTotalMoma });
       }
     }
 
-    result = getRandom(result, 50);
-
-    let resultByTokenId = {};
-
-    for (let i = 0; i <= 4; i++) {
-      resultByTokenId[i.toString()] = [];
-      for (let j = 0; j <= 9; j++) {
-        resultByTokenId[i.toString()].push(result[10 * i + j]);
-      }
-    }
-
-    resultByTokenId = JSON.stringify(resultByTokenId);
-    fs.writeFileSync('./results/List.json', resultByTokenId);
+    console.log(accMoma.length + ' addresses valid');
+    accMoma = JSON.stringify(accMoma);
+    fs.writeFileSync('./results/List.json', accMoma);
 
     console.log('DONE');
     process.exit(0);
@@ -89,19 +78,6 @@ async function main() {
     console.log(err);
     process.exit(1);
   }
-}
-
-function getRandom(arr, n) {
-  var result = new Array(n),
-    len = arr.length,
-    taken = new Array(len);
-  if (n > len) throw new RangeError('GetRandom: more elements taken than available');
-  while (n--) {
-    var x = Math.floor(Math.random() * len);
-    result[n] = arr[x in taken ? taken[x] : x];
-    taken[x] = --len in taken ? taken[len] : len;
-  }
-  return result;
 }
 
 main();
